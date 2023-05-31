@@ -1,20 +1,19 @@
 import Image from "next/image";
 import React from "react";
+import Avatar from "../../public/images/avatar.jpg";
 import Link from "next/link";
 export default function Profile() {
   return (
-    <section className="mx-auto w-full flex flex-col items-center gap-y-3">
-      <div className="w-[200px] h-[200px]">
-        <Image alt="avatar" src={"/images/avatar.jpg"} width={200} height={0} className="w-full h-full rounded-full " />
+    <section className="mx-auto text-center">
+      <div className="w-[250px] h-[250px] mx-auto">
+        <Image alt="avatar" src={Avatar} width={250} className="w-full h-full rounded-full " priority />
       </div>
-      <div className="leading-4 text-center">
-        <div className="font-bold text-lg">{"Hi! I'm May"}</div>
-        <div className="font-semibold text-md">Frontend Developer</div>
-        <div className="text-sm">항상 피곤한 사람</div>
-        <Link href="/contact" className="p-1 rounded bg-yellow-400 text-sm">
-          Contact Me
-        </Link>
-      </div>
+      <h2 className="font-bold text-2xl mt-2">{"Hi! I'm May"}</h2>
+      <h3 className="font-semibold text-xl">Frontend Developer</h3>
+      <p className="mt-1">항상 피곤한 사람</p>
+      <Link href="/contact">
+        <button className="py-1 px-4 mt-2 rounded bg-yellow-500 "> Contact Me</button>
+      </Link>
     </section>
   );
 }
