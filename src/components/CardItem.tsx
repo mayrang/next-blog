@@ -1,27 +1,26 @@
 import { Post } from "@/api/posts";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
-export default function CardItem({ post }: { post: Post }) {
+type Props = {
+  post: Post;
+};
+export default function CardItem({ post: { title, description, path, date, category } }: Props) {
   return (
-    <div className="shadow-xl w-auto">
-      <div className="w-full h-[200px]">
-        <Image
-          src={`/images/posts/${post.path}.png`}
-          alt={post.path}
-          className="w-full h-full"
-          width={200}
-          height={200}
-        />
-      </div>
-      <div className="p-3 pb-5">
-        <time className="block text-end w-full text-sm">{new Date(post.date).toISOString().split("T")[0]}</time>
-        <div className="text-center">
-          <h4 className="font-semibold">{post.title}</h4>
-          <p className="text-sm">{post.description}</p>
-          <span className="bg-green-200 text-xs rounded mt-2 px-1">{post.category}</span>
+    <Link href={`/posts/${path}`}>
+      <article className="shadow-lg  rounded-md overflow-hidden">
+        <div className="w-full h-[200px]">
+          <Image src={`/images/posts/${path}.png`} alt={path} className="w-full h-full" width={200} height={200} />
         </div>
-      </div>
-    </div>
+        <div className="flex flex-col items-center p-4 ">
+          <time className=" self-end text-sm">{date.toString()}</time>
+
+          <h4 className="font-bold text-lg">{title}</h4>
+          <p className="w-full truncate text-center">{description}</p>
+          <span className="bg-green-200 text-sm rounded-lg my-2 px-2">{category}</span>
+        </div>
+      </article>
+    </Link>
   );
 }

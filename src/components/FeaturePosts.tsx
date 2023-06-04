@@ -6,8 +6,8 @@ import CardList from "./CardList";
 export default async function FeaturePosts() {
   const posts = await getFeaturePosts();
   return (
-    <section className="my-20">
-      <h3 className="font-semibold text-xl">FeaturePosts</h3>
+    <section className="px-2">
+      <h3 className="font-semibold text-2xl my-2">FeaturePosts</h3>
       <CardList cardList={posts} />
     </section>
   );
