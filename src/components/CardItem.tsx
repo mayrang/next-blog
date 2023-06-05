@@ -9,7 +9,7 @@ type Props = {
 export default function CardItem({ post: { title, description, path, date, category } }: Props) {
   return (
     <Link href={`/posts/${path}`}>
-      <article className="shadow-lg  rounded-md overflow-hidden">
+      <article className="shadow-md hover:shadow-lg  rounded-md overflow-hidden">
         <div className="w-full h-[200px]">
           <Image src={`/images/posts/${path}.png`} alt={path} className="w-full h-full" width={200} height={200} />
         </div>
