@@ -17,6 +17,11 @@ export async function getAllPosts(): Promise<Post[]> {
     .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1)));
 }
 
+export async function getLikePosts(): Promise<Post[]> {
+  const allPosts = await getAllPosts();
+  return allPosts.filter((post) => !post.featured);
+}
+
 export async function getFeaturePosts(): Promise<Post[]> {
   const allPosts = await getAllPosts();
   return allPosts.filter((post) => post.featured);
