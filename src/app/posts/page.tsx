@@ -1,5 +1,7 @@
+import { getAllPosts } from "@/api/posts";
 import React from "react";
 
-export default function PostsPage() {
+export default async function PostsPage() {
+  const posts = await getAllPosts();
   return <div>posts</div>;
 }
