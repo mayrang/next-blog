@@ -31,16 +31,14 @@ export async function getFeaturePosts(): Promise<Post[]> {
 }
 
 export async function getDetailPost(id: string): Promise<DetailPost | string> {
-  const allPosts = await getAllPosts();
-  const detailPost = allPosts.find((post) => id === post.path);
-  if (!detailPost) {
-    return "해당 페이지는 존재하지 않습니다.";
-  }
+  const metadata = await getAllPosts().then((posts) => posts.find((post) => id === post.path));
+
+  if (!metadata) return "해당 페이지를 찾을 수 없습니다.";
   const detailFilePath = path.join(process.cwd(), "data", "posts", `${id}.md`);
   const content = await readFile(detailFilePath, "utf-8");
 
   return {
-    ...detailPost,
+    ...metadata,
     content,
   };
 }
