@@ -1,34 +1,25 @@
-"use client";
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   categoryList: string[];
+  selected: string;
+  onClick: (category: string) => void;
 };
-export default function Category({ categoryList }: Props) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const nowCategory = searchParams.get("category") || "";
-  const handleButton = (category: string) => {
-    if (category === "all") {
-      router.push("/posts");
-    } else {
-      router.push(`/posts?category=${category}`);
-    }
-  };
+export default function Category({ categoryList, selected, onClick }: Props) {
   return (
-    <div className="hidden md:block mt-10 pr-8">
-      <h4 className="font-bold font-lg leading-5  border-b-gray-300 border-b-4">Category</h4>
-      <div className="flex flex-col items-center">
-        <button disabled={nowCategory === ""} onClick={() => handleButton("all")}>
-          All Posts
-        </button>
+    <div className="hidden md:block text-center p-4">
+      <h4 className="font-bold font-lg leading-5  border-b-sky-500 border-b mb-4">Category</h4>
+      <ul>
         {categoryList.map((category) => (
-          <button disabled={nowCategory === category} key={category} onClick={() => handleButton(category)}>
+          <li
+            className={`cursor-pointer hover:text-sky-500 ${selected === category && "text-sky-600"}`}
+            key={category}
+            onClick={() => onClick(category)}
+          >
             {category}
-          </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
