@@ -11,12 +11,10 @@ export interface Post {
 }
 export interface DetailPost extends Post {
   content: string;
+  prev: Post | null;
+  next: Post | null;
 }
 
-export interface RelationPosts {
-  prev?: Post;
-  next?: Post;
-}
 export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), "data", "posts.json");
   return readFile(filePath, "utf-8")
@@ -35,31 +33,19 @@ export async function getFeaturePosts(): Promise<Post[]> {
 }
 
 export async function getDetailPost(id: string): Promise<DetailPost | string> {
-  const metadata = await getAllPosts().then((posts) => posts.find((post) => id === post.path));
-
-  if (!metadata) return "해당 페이지를 찾을 수 없습니다.";
+  const posts = await getAllPosts();
+  const post = posts.find((post) => post.path === id);
+  if (!post) return "해당 페이지를 찾을 수 없습니다.";
+  const index = posts.indexOf(post);
+  const next = index !== 0 ? posts[index - 1] : null;
+  const prev = index !== posts.length - 1 ? posts[index + 1] : null;
   const detailFilePath = path.join(process.cwd(), "data", "posts", `${id}.md`);
   const content = await readFile(detailFilePath, "utf-8");
 
   return {
-    ...metadata,
+    ...post,
+    prev,
+    next,
     content,
   };
-}
-
-export async function getRelationPosts(id: string): Promise<string | RelationPosts> {
-  const metaData = await getAllPosts();
-  const metaIndex = metaData.findIndex((post) => id === post.path);
-  let relationPosts = {};
-  if (metaIndex === -1) return "해당 페이지를 찾을 수 없습니다.";
-  console.log(metaIndex, metaData.length);
-  if (metaIndex !== 0) {
-    console.log("prev");
-    relationPosts = { ...relationPosts, next: metaData[metaIndex - 1] };
-  }
-  if (metaIndex !== metaData.length - 1) {
-    console.log("next");
-    relationPosts = { ...relationPosts, prev: metaData[metaIndex + 1] };
-  }
-  return relationPosts;
 }
