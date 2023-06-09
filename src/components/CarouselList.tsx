@@ -11,7 +11,7 @@ export default async function CarouselList() {
       <h3 className="font-semibold text-2xl my-2">You May Like</h3>
       <MultiCarousel>
         {posts.map((post) => (
-          <CardItem post={post} />
+          <CardItem post={post} key={post.path} />
         ))}
       </MultiCarousel>
     </section>
