@@ -13,6 +13,10 @@ export interface DetailPost extends Post {
   content: string;
 }
 
+export interface RelationPosts {
+  prev?: Post;
+  next?: Post;
+}
 export async function getAllPosts(): Promise<Post[]> {
   const filePath = path.join(process.cwd(), "data", "posts.json");
   return readFile(filePath, "utf-8")
@@ -41,4 +45,21 @@ export async function getDetailPost(id: string): Promise<DetailPost | string> {
     ...metadata,
     content,
   };
+}
+
+export async function getRelationPosts(id: string): Promise<string | RelationPosts> {
+  const metaData = await getAllPosts();
+  const metaIndex = metaData.findIndex((post) => id === post.path);
+  let relationPosts = {};
+  if (metaIndex === -1) return "해당 페이지를 찾을 수 없습니다.";
+  console.log(metaIndex, metaData.length);
+  if (metaIndex !== 0) {
+    console.log("prev");
+    relationPosts = { ...relationPosts, next: metaData[metaIndex - 1] };
+  }
+  if (metaIndex !== metaData.length - 1) {
+    console.log("next");
+    relationPosts = { ...relationPosts, prev: metaData[metaIndex + 1] };
+  }
+  return relationPosts;
 }
