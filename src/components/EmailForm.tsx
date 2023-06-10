@@ -1,77 +1,66 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Banner, { BannerData } from "./Banner";
+
+type FormData = {
+  email: string;
+  subject: string;
+  message: string;
+};
 
 export default function EmailForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     subject: "",
     message: "",
   });
-  const [banner, setBanner] = useState({
-    show: false,
-    type: "",
-    message: "",
-  });
+  const [banner, setBanner] = useState<BannerData | null>(null);
 
-  useEffect(() => {
-    console.log(1);
-    if (banner.show) {
-      setTimeout(() => {
-        setBanner({ show: false, type: "", message: "" });
-      }, 3000);
-    }
-  }, [banner]);
   const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.email.trim() === "") {
       setBanner({
-        show: true,
-        type: "warning",
+        type: "error",
         message: "이메일은 비워놓을 수 없습니다.",
       });
       return;
     } else if (formData.subject.trim() === "") {
       setBanner({
-        show: true,
-        type: "warning",
+        type: "error",
         message: "제목은 비워놓을 수 없습니다.",
       });
       return;
     } else if (formData.message.trim() === "") {
       setBanner({
-        show: true,
-        type: "warning",
+        type: "error",
         message: "메시지는 비워놓을 수 없습니다.",
       });
       return;
     }
     console.log(formData);
     setBanner({
-      show: true,
       type: "success",
       message: "성공했음",
     });
+    setTimeout(() => {
+      setBanner(null);
+    }, 3000);
   };
   return (
     <section className="w-full max-w-md">
-      {banner.show && (
-        <div
-          className={`rounded w-full text-center p-4 font-semibold ${
-            banner.type === "success" ? "bg-green-300" : "bg-red-300"
-          }`}
-        >
-          {banner.message}
-        </div>
-      )}
+      {banner && <Banner banner={banner} />}
       <form onSubmit={handleSubmit} className="rounded-xl w-full my-4 p-4 bg-slate-700 gap-2 flex flex-col">
         <label htmlFor="email" className="font-semibold text-xl text-white">
           Your Email
         </label>
         <input
+          type="email"
+          required
+          autoFocus
           id="email"
           name="email"
           value={formData.email}
@@ -82,6 +71,8 @@ export default function EmailForm() {
           Subject
         </label>
         <input
+          type="text"
+          required
           id="subject"
           name="subject"
           value={formData.subject}
@@ -93,6 +84,7 @@ export default function EmailForm() {
         </label>
         <textarea
           id="message"
+          required
           name="message"
           value={formData.message}
           onChange={changeForm}
