@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Banner, { BannerData } from "./Banner";
+import { sendContactEmail } from "@/api/contact";
 
 type FormData = {
   email: string;
@@ -41,30 +42,25 @@ export default function EmailForm() {
       });
       return;
     }
-    console.log(formData);
-    const result = await fetch("/api/email", {
-      method: "POST",
-      body: JSON.stringify(formData),
-    });
-    console.log("result", result);
-    if (result.ok) {
-      setBanner({
-        type: "success",
-        message: "성공했음",
+    sendContactEmail(formData)
+      .then(() => {
+        setBanner({
+          type: "success",
+          message: "성공했음",
+        });
+        setFormData({ email: "", subject: "", message: "" });
+      })
+      .catch((err) => {
+        setBanner({
+          type: "error",
+          message: err.message || "이메일을 보내는 과정에서 에러가 발생했습니다.",
+        });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setBanner(null);
+        }, 3000);
       });
-      setFormData({ email: "", subject: "", message: "" });
-    } else {
-      const error = await result.json();
-      console.log(error);
-      setBanner({
-        type: "error",
-        message: error.error,
-      });
-    }
-
-    setTimeout(() => {
-      setBanner(null);
-    }, 3000);
   };
   return (
     <section className="w-full max-w-md">
