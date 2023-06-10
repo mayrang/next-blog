@@ -19,7 +19,7 @@ export default function EmailForm() {
   const changeForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.email.trim() === "") {
@@ -42,10 +42,26 @@ export default function EmailForm() {
       return;
     }
     console.log(formData);
-    setBanner({
-      type: "success",
-      message: "성공했음",
+    const result = await fetch("/api/email", {
+      method: "POST",
+      body: JSON.stringify(formData),
     });
+    console.log("result", result);
+    if (result.ok) {
+      setBanner({
+        type: "success",
+        message: "성공했음",
+      });
+      setFormData({ email: "", subject: "", message: "" });
+    } else {
+      const error = await result.json();
+      console.log(error);
+      setBanner({
+        type: "error",
+        message: error.error,
+      });
+    }
+
     setTimeout(() => {
       setBanner(null);
     }, 3000);
