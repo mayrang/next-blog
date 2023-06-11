@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header className=" flex items-center justify-between  p-4 w-full ">
       <Link href="/" className="font-bold text-2xl">
-        May's Blog
+        {"May's Blog"}
       </Link>
       <div className="flex items-center gap-4 ">
         <Link href="/">Home</Link>

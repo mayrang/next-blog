@@ -1,4 +1,4 @@
-import { getDetailPost } from "@/api/posts";
+import { getDetailPost, getFeaturePosts } from "@/api/posts";
 import { notFound } from "next/navigation";
 import React from "react";
 import PostContent from "@/components/PostContent";
@@ -13,6 +13,13 @@ export async function generateMetadata({ params: { id } }: Props) {
       description: post.description,
     };
   }
+}
+
+export async function generateStaticParams() {
+  const posts = await getFeaturePosts();
+  return posts.map((post) => ({
+    id: post.path,
+  }));
 }
 
 type Props = {
