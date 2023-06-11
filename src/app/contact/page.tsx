@@ -2,6 +2,11 @@ import EmailForm from "@/components/EmailForm";
 import React from "react";
 import { AiFillGithub, AiFillInstagram, AiFillYoutube } from "react-icons/ai";
 
+export const metadata = {
+  title: "Contact",
+  description: "연락 페이지 입니다.",
+};
+
 const iconList = [
   { icon: <AiFillGithub />, url: "https://github.com/mayrang" },
   { icon: <AiFillInstagram />, url: "https://www.instagram.com/g.s.parkk/" },

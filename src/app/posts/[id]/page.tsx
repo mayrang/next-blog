@@ -3,8 +3,17 @@ import { notFound } from "next/navigation";
 import React from "react";
 import PostContent from "@/components/PostContent";
 import Image from "next/image";
-import { AiTwotoneCalendar } from "react-icons/ai";
 import AdjacentPost from "@/components/AdjacentPost";
+
+export async function generateMetadata({ params: { id } }: Props) {
+  const post = await getDetailPost(id);
+  if (typeof post !== "string") {
+    return {
+      title: post.title,
+      description: post.description,
+    };
+  }
+}
 
 type Props = {
   params: {
